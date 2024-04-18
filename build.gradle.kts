@@ -1,24 +1,27 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.21"
+  kotlin("jvm") version "1.7.21"
 }
 
 group = "aryunka"
 version = "1.0-SNAPSHOT"
 
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
+  testImplementation(kotlin("test"))
+  implementation("com.rabbitmq:amqp-client:5.21.0")
+  implementation("org.slf4j:slf4j-api:2.0.12")
+  implementation("org.slf4j:slf4j-simple:2.0.12")
 }
 
 tasks.test {
-    useJUnitPlatform()
+  useJUnitPlatform()
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+  kotlinOptions.jvmTarget = "1.8"
 }
