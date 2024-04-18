@@ -79,6 +79,8 @@ object PublisherConfirms {
       val queue = UUID.randomUUID().toString()
       channel.queueDeclare(queue, false, false, true, null)
       channel.confirmSelect()
+      // outstandingConfirms는 확인되지 않은 메시지를 추적하는 데 사용된다.
+      // ConcurrentSkipListMap은 시퀀스 번호 순서로 메시지를 저장할 수 있고 동시성을 지원한다. 메시지의 시퀀스 번호를 키, 메시지의 내용은 값으로 사용된다.
       val outstandingConfirms: ConcurrentNavigableMap<Long, String> =
         ConcurrentSkipListMap()
 
@@ -95,7 +97,7 @@ object PublisherConfirms {
           }
         }
 
-
+      // ConfirmCallback을 사용하여 확인되지 않은 메시지를 추적하고, nack을 처리한다.
       channel.addConfirmListener(
         cleanOutstandingConfirms
       ) { sequenceNumber: Long, multiple: Boolean ->
@@ -109,6 +111,7 @@ object PublisherConfirms {
       val start = System.nanoTime()
       for (i in 0 until MESSAGE_COUNT) {
         val body = i.toString()
+        // 다음 발행 시퀀스 번호를 키로 사용하여 메시지를 outstandingConfirms에 저장한다.
         outstandingConfirms[channel.nextPublishSeqNo] = body
         channel.basicPublish("", queue, null, body.toByteArray())
       }

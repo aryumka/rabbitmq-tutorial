@@ -23,7 +23,8 @@ object ReceiveLogsDirect {
       exitProcess(1);
     }
 
-    // routinh key에 해당하는 메시지만 받기 위해 큐를 바인딩한다.
+    // routing key에 해당하는 메시지만 받기 위해 큐를 바인딩한다.
+    // To receive messages that have a specific routing key, a queue is bound to the exchange.
     for (severity in argv) {
       channel.queueBind(queueName, EXCHANGE_NAME, severity)
     }

@@ -25,8 +25,11 @@ object ReceiveLogsTopic {
     }
 
     // topic에 해당하는 메시지만 받기 위해 큐를 바인딩한다.
+    // To receive messages that have a specific topic, a queue is bound to the exchange.
     // *는 하나의 단어를 대체한다. ex) *.info, *.error
+    // * is used to substitute for exactly one word. ex) *.info, *.error
     // #은 여러 단어를 대체한다. ex) #.info, *.#
+    // # is used to substitute for zero or more words. ex) #.info, *.#
     for (severity in argv) {
       channel.queueBind(queueName, EXCHANGE_NAME, severity)
     }

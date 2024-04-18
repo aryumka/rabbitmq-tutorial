@@ -13,6 +13,7 @@ object EmitLogDirect {
     factory.newConnection().use { connection ->
       connection.createChannel().use { channel ->
         // direct exchange를 사용하여 binding key에 routing key가 일치하는 큐로 메시지를 전달한다.
+        // Deliver messages to queues based on the routing key.
         channel.exchangeDeclare(EXCHANGE_NAME, "direct")
 
         val severity = getSeverity(argv)
